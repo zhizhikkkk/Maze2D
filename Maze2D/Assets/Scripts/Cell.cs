@@ -16,4 +16,5 @@ public class Cell : MonoBehaviour
         WallTop.SetActive(top);
         WallBottom.SetActive(bottom);
     }
+    
 }

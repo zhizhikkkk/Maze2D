@@ -17,9 +17,12 @@ public class MazeGeneratorCell
 public class MazeGenerator
 {
     public int Radius = 10; // Радиус окружности лабиринта
+    private GameObject mazeParent;
 
-    public MazeGeneratorCell[,] GenerateMaze()
+    public MazeGeneratorCell[,] GenerateMaze(GameObject parent)
     {
+        mazeParent = parent;
+        CalculateMazeSize();
         int diameter = Radius * 2;
         MazeGeneratorCell[,] maze = new MazeGeneratorCell[diameter, diameter];
         Vector2 center = new Vector2(Radius, Radius);
@@ -45,6 +48,15 @@ public class MazeGenerator
         RemoveWallsWithBacktracker(maze, center);
         PlaceMazeExit(maze);
         return maze;
+    }
+    private void CalculateMazeSize()
+    {
+        // Получаем размеры экрана
+        float screenHeight = Camera.main.orthographicSize * 2;
+        float screenWidth = screenHeight * Screen.width / Screen.height;
+
+        // Вычисляем радиус на основе размеров экрана, возможно, вам потребуется умножить на некоторый коэффициент
+        Radius = (int)(Mathf.Min(screenWidth, screenHeight) / 2 * 0.9f);
     }
     private void PlaceMazeExit(MazeGeneratorCell[,] maze)
     {
@@ -76,8 +88,6 @@ public class MazeGenerator
                 exitCell = maze[maze.GetLength(0) - 1, j];
             }
         }
-
-        // Удаляем стену, чтобы создать выход
         if (exitCell != null)
         {
             if (exitCell.X == 0)
@@ -97,6 +107,7 @@ public class MazeGenerator
                 exitCell.WallTop = false;
             }
         }
+
     }
     private void RemoveWallsWithBacktracker(MazeGeneratorCell[,] maze, Vector2 center)
     {
@@ -117,7 +128,7 @@ public class MazeGenerator
                 RemoveWall(currentCell, nextCell);
                 nextCell.Visited = true;
                 stack.Push(nextCell);
-                nextCell.DistanceFromStart= stack.Count ;
+                nextCell.DistanceFromStart = stack.Count;
             }
             else
             {
