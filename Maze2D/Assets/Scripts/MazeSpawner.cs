@@ -13,6 +13,7 @@ public class MazeSpawner : MonoBehaviour
     }
     public void Generate()
     {
+        ClearMaze();
         MazeGenerator generator = new MazeGenerator();
         MazeGeneratorCell[,] maze = generator.GenerateMaze();
 
@@ -26,6 +27,12 @@ public class MazeSpawner : MonoBehaviour
             }
         }
     }
-    
+    private void ClearMaze()
+    {
+        foreach (Transform child in MazeParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 
 }
