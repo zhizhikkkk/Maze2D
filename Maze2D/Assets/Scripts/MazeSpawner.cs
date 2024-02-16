@@ -21,9 +21,11 @@ public class MazeSpawner : MonoBehaviour
         {
             for (int j = 0; j < maze.GetLength(1); j++)
             {
-                Cell c = Instantiate(CellPrefab, new Vector2(i, j), Quaternion.identity,MazeParent.transform).GetComponent<Cell>();
-                c.WallLeft.SetActive(maze[i, j].WallLeft);
-                c.WallBottom.SetActive(maze[i, j].WallBottom);
+                if (maze[i, j].IsPassable) // Проверяем, что ячейка проходима
+                {
+                    Cell c = Instantiate(CellPrefab, new Vector3(i - generator.Radius, j - generator.Radius, 0), Quaternion.identity, MazeParent.transform).GetComponent<Cell>();
+                    c.SetWalls(maze[i, j].WallLeft, maze[i, j].WallRight, maze[i, j].WallTop, maze[i, j].WallBottom);
+                }
             }
         }
     }
