@@ -15,8 +15,10 @@ public class MazeSpawner : MonoBehaviour
     public void Generate()
     {
         ClearMaze();
+        ClearExits();
         MazeGenerator generator = new MazeGenerator();
-        MazeGeneratorCell[,] maze = generator.GenerateMaze(MazeParent);
+        MazeGeneratorCell exitCell;
+        MazeGeneratorCell[,] maze = generator.GenerateMaze(MazeParent, out exitCell);
 
         for (int i = 0; i < maze.GetLength(0); i++)
         {
@@ -30,6 +32,15 @@ public class MazeSpawner : MonoBehaviour
                 }
             }
         }
+        ExitManager exitManager = FindObjectOfType<ExitManager>();
+        if (exitManager != null)
+        {
+            exitManager.CreateExit(exitCell,generator.Radius);
+        }
+        else
+        {
+            Debug.LogError("ExitManager not found on the scene!");
+        }
     }
     public GameObject GetParent()
     {
@@ -42,5 +53,11 @@ public class MazeSpawner : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-
+    private void ClearExits()
+    {
+        foreach (GameObject exit in GameObject.FindGameObjectsWithTag("Exit"))
+        {
+            Destroy(exit);
+        }
+    }
 }
