@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,7 +10,12 @@ public class GameManager : MonoBehaviour
 
     public float timeRemaining = 60f;
     public bool gameHasEnded = false;
-
+    public GameObject winPanel;
+    public GameObject losePanel;
+    public string currentPlayerName;
+    public PlayerControls player;
+    public TextMeshProUGUI winPanelScoreText;
+    public MazeSpawner spawner;
     private void Awake()
     {
         if (Instance == null)
@@ -40,32 +47,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void StartGame()
+    {
+        Time.timeScale = 1f; // Возобновляем время в игре
+        gameHasEnded = false;
+        timeRemaining = 60f; 
+    }
     public void EndGame()
     {
         gameHasEnded = true;
         // Здесь код для отображения результатов и/или перезапуска
+        losePanel.SetActive(true);
     }
 
     public void PlayerWon()
     {
         Debug.Log("Вы выиграли!");
+        float score = 60 - timeRemaining;
+        winPanelScoreText.text = "Your score :" + score;
         gameHasEnded = true;
-        // Здесь код для сохранения результатов и/или перезапуска
+        winPanel.SetActive(true);
     }
+    
+   
     public void RestartGame()
     {
-        // Найти игрока и сбросить его позицию
-        PlayerControls playerControls = FindObjectOfType<PlayerControls>();
-        if (playerControls != null)
-        {
-            playerControls.ResetPlayer();
-        }
-
-        // Вызовите любые другие методы, которые нужны для рестарта, например, сгенерировать новый лабиринт
-        MazeSpawner mazeSpawner = FindObjectOfType<MazeSpawner>();
-        if (mazeSpawner != null)
-        {
-            mazeSpawner.Generate();
-        }
+        spawner.Generate();
+        winPanel.SetActive(false);
+        losePanel.SetActive(false);
+        StartGame();
+        player.ResetPosition();
     }
 }

@@ -73,6 +73,7 @@ public class MazeGenerator
             if (maze[0, j].IsPassable) edgeCells.Add(maze[0, j]);
             if (maze[maze.GetLength(0) - 1, j].IsPassable) edgeCells.Add(maze[maze.GetLength(0) - 1, j]);
         }
+        
         MazeGeneratorCell exitCell = null;
         // ¬ыбираем случайную €чейку из списка крайних €чеек
         if (edgeCells.Count > 0)

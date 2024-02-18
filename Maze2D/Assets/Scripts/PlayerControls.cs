@@ -8,7 +8,7 @@ public class PlayerControls : MonoBehaviour
 
     private Rigidbody2D componentRigidbody;
     private Camera mainCamera; // Камера для преобразования позиции касания в координаты мира
-
+    public GameManager gameManager;
     private void Start()
     {
         componentRigidbody = GetComponent<Rigidbody2D>();
@@ -17,6 +17,11 @@ public class PlayerControls : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.gameHasEnded || Time.timeScale == 0)
+        {
+            componentRigidbody.velocity = Vector2.zero;
+            return;
+        }
         // Проверяем, есть ли касание
         if (Input.touchCount > 0)
         {
@@ -53,14 +58,11 @@ public class PlayerControls : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("Вы выиграли!");
-
+        gameManager.PlayerWon();
     }
-    public void ResetPlayer()
+    public void ResetPosition()
     {
-        // Сброс позиции игрока
-        transform.position = Vector3.zero;
-        transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-        // Сброс скорости, чтобы шарик остановился
-        componentRigidbody.velocity = Vector2.zero;
+        transform.position = Vector2.zero;
     }
+   
 }
