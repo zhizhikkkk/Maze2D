@@ -10,7 +10,7 @@ public class ExitManager : MonoBehaviour
     {
         GameObject exitObject = Instantiate(
             exitPrefab,
-            new Vector3(exitCell.X - Radius+0.5f, exitCell.Y - Radius+0.5f, 0),
+            new Vector3((exitCell.X - Radius+0.5f)*0.5f, (exitCell.Y - Radius+0.5f)*0.5f, 0),
             Quaternion.identity
         );
         exitObject.tag = "Exit";

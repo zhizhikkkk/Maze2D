@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -97,5 +98,10 @@ public class GameManager : MonoBehaviour
         winPanel.SetActive(false);
         losePanel.SetActive(false);
         startPanel.SetActive(false);
+    }
+    public void QuitGame()
+    {
+        Application.Quit();
+
     }
 }

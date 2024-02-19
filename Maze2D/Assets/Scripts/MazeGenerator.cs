@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MazeGeneratorCell
@@ -16,13 +17,13 @@ public class MazeGeneratorCell
 }
 public class MazeGenerator
 {
-    public int Radius = 10; // Радиус окружности лабиринта
+    public int Radius = 15; // Радиус окружности лабиринта
     private GameObject mazeParent;
 
     public MazeGeneratorCell[,] GenerateMaze(GameObject parent, out MazeGeneratorCell exitCell)
     {
         mazeParent = parent;
-        CalculateMazeSize();
+        //CalculateMazeSize();
         int diameter = Radius * 2;
         MazeGeneratorCell[,] maze = new MazeGeneratorCell[diameter, diameter];
         Vector2 center = new Vector2(Radius, Radius);
@@ -58,6 +59,49 @@ public class MazeGenerator
         // Вычисляем радиус на основе размеров экрана, возможно, вам потребуется умножить на некоторый коэффициент
         Radius = (int)(Mathf.Min(screenWidth, screenHeight) / 2 * 0.9f);
     }
+    //private MazeGeneratorCell PlaceMazeExit(MazeGeneratorCell[,] maze)
+    //{
+    //    List<MazeGeneratorCell> edgeCells = new List<MazeGeneratorCell>();
+
+    //    // Собираем все проходимые ячейки по периметру
+    //    for (int i = 0; i < maze.GetLength(0); i++)
+    //    {
+    //        if (maze[i, 0].IsPassable) edgeCells.Add(maze[i, 0]);
+    //        if (maze[i, maze.GetLength(1) - 1].IsPassable) edgeCells.Add(maze[i, maze.GetLength(1) - 1]);
+    //    }
+    //    for (int j = 0; j < maze.GetLength(1); j++)
+    //    {
+    //        if (maze[0, j].IsPassable) edgeCells.Add(maze[0, j]);
+    //        if (maze[maze.GetLength(0) - 1, j].IsPassable) edgeCells.Add(maze[maze.GetLength(0) - 1, j]);
+    //    }
+
+    //    MazeGeneratorCell exitCell = null;
+    //    // Выбираем случайную ячейку из списка крайних ячеек
+    //    if (edgeCells.Count > 0)
+    //    {
+    //        exitCell = edgeCells[Random.Range(0, edgeCells.Count)];
+    //        // Удаляем стену, чтобы создать выход
+    //        if (exitCell.X == 0)
+    //        {
+    //            exitCell.WallLeft = false;
+    //        }
+    //        else if (exitCell.Y == 0)
+    //        {
+    //            exitCell.WallBottom = false;
+    //        }
+    //        else if (exitCell.X == maze.GetLength(0) - 1)
+    //        {
+    //            exitCell.WallRight = false;
+    //        }
+    //        else if (exitCell.Y == maze.GetLength(1) - 1)
+    //        {
+    //            exitCell.WallTop = false;
+    //        }
+
+
+    //    }
+    //    return exitCell;
+    //}
     private MazeGeneratorCell PlaceMazeExit(MazeGeneratorCell[,] maze)
     {
         List<MazeGeneratorCell> edgeCells = new List<MazeGeneratorCell>();
@@ -73,11 +117,16 @@ public class MazeGenerator
             if (maze[0, j].IsPassable) edgeCells.Add(maze[0, j]);
             if (maze[maze.GetLength(0) - 1, j].IsPassable) edgeCells.Add(maze[maze.GetLength(0) - 1, j]);
         }
-        
+
+        // Фильтруем edgeCells, чтобы оставить только те, которые ближе к предпочитаемому "логическому" краю
+        // Это может быть реализовано различными способами, в зависимости от вашего предпочтения
+        // Например, если вы хотите, чтобы выход был всегда на правой стороне, вы можете сделать так:
+        edgeCells = edgeCells.Where(cell => cell.X == maze.GetLength(0) - 1).ToList();
+
         MazeGeneratorCell exitCell = null;
-        // Выбираем случайную ячейку из списка крайних ячеек
         if (edgeCells.Count > 0)
         {
+            // Выбираем случайную ячейку из отфильтрованного списка
             exitCell = edgeCells[Random.Range(0, edgeCells.Count)];
             // Удаляем стену, чтобы создать выход
             if (exitCell.X == 0)
@@ -96,12 +145,9 @@ public class MazeGenerator
             {
                 exitCell.WallTop = false;
             }
-
-            
         }
         return exitCell;
     }
-  
     private void RemoveWallsWithBacktracker(MazeGeneratorCell[,] maze, Vector2 center)
     {
 
