@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     public PlayerControls player;
     public TextMeshProUGUI winPanelScoreText;
     public MazeSpawner spawner;
+    public GameObject startPanel;
+    public GameObject leaderboardPanel;
+    public ScoreManager scoreManager;
     private void Awake()
     {
         if (Instance == null)
@@ -67,15 +70,32 @@ public class GameManager : MonoBehaviour
         winPanelScoreText.text = "Your score :" + score;
         gameHasEnded = true;
         winPanel.SetActive(true);
+        scoreManager.SetScore((int)score);
+        scoreManager.SubmitScore();
     }
     
-   
     public void RestartGame()
     {
-        spawner.Generate();
         winPanel.SetActive(false);
         losePanel.SetActive(false);
+        leaderboardPanel.SetActive(false);
+        startPanel.SetActive(true) ;
+    }
+    public void RestartGame2()
+    {
+        startPanel.SetActive(false) ;
+        leaderboardPanel.SetActive(false);
+        winPanel.SetActive(false);
+        losePanel.SetActive(false);
+        spawner.Generate();
         StartGame();
         player.ResetPosition();
+    }
+    public void OpenLeaderBoard()
+    {
+        leaderboardPanel.SetActive(true);
+        winPanel.SetActive(false);
+        losePanel.SetActive(false);
+        startPanel.SetActive(false);
     }
 }
