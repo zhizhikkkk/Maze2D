@@ -20,6 +20,20 @@ public class MazeSpawner : MonoBehaviour
         MazeGeneratorCell exitCell;
         MazeGeneratorCell[,] maze = generator.GenerateMaze(MazeParent, out exitCell);
 
+
+
+
+
+
+        float screenHeight = Camera.main.orthographicSize * 2;
+        float screenWidth = screenHeight * Screen.width / Screen.height;
+
+        // Вычисляем размер ячейки, чтобы лабиринт поместился на экране
+        cellSize = Mathf.Min(screenWidth / (generator.Radius * 2.5f), screenHeight / (generator.Radius * 2.5f));
+
+
+
+
         for (int i = 0; i < maze.GetLength(0); i++)
         {
             for (int j = 0; j < maze.GetLength(1); j++)
@@ -44,6 +58,7 @@ public class MazeSpawner : MonoBehaviour
             Debug.LogError("ExitManager not found on the scene!");
         }
     }
+
     public GameObject GetParent()
     {
         return MazeParent;

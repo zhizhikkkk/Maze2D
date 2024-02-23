@@ -15,11 +15,11 @@ public class GameManager : MonoBehaviour
     public GameObject losePanel;
     public string currentPlayerName;
     public PlayerControls player;
-    public TextMeshProUGUI winPanelScoreText;
     public MazeSpawner spawner;
     public GameObject startPanel;
     public GameObject leaderboardPanel;
     public ScoreManager scoreManager;
+    public TextMeshProUGUI currentScoreText;
     private void Awake()
     {
         if (Instance == null)
@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
 
         if (timeRemaining > 0)
         {
+            currentScoreText.text =( (int)timeRemaining).ToString();
             timeRemaining -= Time.deltaTime;
         }
         else
@@ -62,13 +63,14 @@ public class GameManager : MonoBehaviour
         gameHasEnded = true;
         // Здесь код для отображения результатов и/или перезапуска
         losePanel.SetActive(true);
+        Time.timeScale = 1f; 
+        timeRemaining = 60f;
     }
 
     public void PlayerWon()
     {
         Debug.Log("Вы выиграли!");
         float score = 60 - timeRemaining;
-        winPanelScoreText.text = "Your score :" + score;
         gameHasEnded = true;
         winPanel.SetActive(true);
         scoreManager.SetScore((int)score);
@@ -84,7 +86,7 @@ public class GameManager : MonoBehaviour
     }
     public void RestartGame2()
     {
-        startPanel.SetActive(false) ;
+        startPanel.SetActive(false);
         leaderboardPanel.SetActive(false);
         winPanel.SetActive(false);
         losePanel.SetActive(false);

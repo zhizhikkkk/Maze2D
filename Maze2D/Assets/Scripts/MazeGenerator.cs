@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class MazeGeneratorCell
@@ -17,7 +18,7 @@ public class MazeGeneratorCell
 }
 public class MazeGenerator
 {
-    public int Radius = 15; // Радиус окружности лабиринта
+    public int Radius = 10; // Радиус окружности лабиринта
     private GameObject mazeParent;
 
     public MazeGeneratorCell[,] GenerateMaze(GameObject parent, out MazeGeneratorCell exitCell)
@@ -59,6 +60,7 @@ public class MazeGenerator
         // Вычисляем радиус на основе размеров экрана, возможно, вам потребуется умножить на некоторый коэффициент
         Radius = (int)(Mathf.Min(screenWidth, screenHeight) / 2 * 0.9f);
     }
+ 
     //private MazeGeneratorCell PlaceMazeExit(MazeGeneratorCell[,] maze)
     //{
     //    List<MazeGeneratorCell> edgeCells = new List<MazeGeneratorCell>();
