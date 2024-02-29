@@ -9,12 +9,12 @@ public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private TMP_InputField inputName;
 
-    public UnityEvent<string, int> submitScoreEvent;
-    private int _score;
+    public UnityEvent<string, float> submitScoreEvent;
+    private float _score;
     public LeaderBoard leaderBoard;
-    public void SetScore(int score)
+    public void SetScore(float score)
     {
-        _score = score;
+        _score = (float)Math.Round(score, 1);
     }
 
     public void SubmitScore()
@@ -31,5 +31,5 @@ public class ScoreManager : MonoBehaviour
 public class ScoreEntry
 {
     public string Name;
-    public int Score;
+    public float Score;
 }

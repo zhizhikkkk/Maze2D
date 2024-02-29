@@ -5,7 +5,7 @@ using System.Collections;
 public class IdleScreenManager : MonoBehaviour
 {
     public GameObject idlePanel; // Перетащите вашу панель UI сюда через редактор Unity
-    private float idleTime = 10f; // Время в секундах, после которого появится заставка
+    private float idleTime = 80f; // Время в секундах, после которого появится заставка
     private float timer; // Таймер для отслеживания времени бездействия
 
     void Update()

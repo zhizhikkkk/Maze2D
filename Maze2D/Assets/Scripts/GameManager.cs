@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         float score = 60 - timeRemaining;
         gameHasEnded = true;
         winPanel.SetActive(true);
-        scoreManager.SetScore((int)score);
+        scoreManager.SetScore(score);
         scoreManager.SubmitScore();
     }
     
